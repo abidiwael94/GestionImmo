@@ -271,10 +271,10 @@ C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\staticwebassets\msbuild.build
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\staticwebassets\msbuild.buildMultiTargeting.GestionImmo.props
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\staticwebassets\msbuild.buildTransitive.GestionImmo.props
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\staticwebassets.pack.json
-C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\GestionI.CDB30E8F.Up2Date
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\GestionImmo.dll
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\refint\GestionImmo.dll
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\GestionImmo.pdb
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\GestionImmo.genruntimeconfig.cache
 C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\ref\GestionImmo.dll
+C:\Users\Wael\Desktop\GestionImmo\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

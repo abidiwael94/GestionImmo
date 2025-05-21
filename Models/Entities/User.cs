@@ -1,6 +1,7 @@
 ﻿using GestionImmo.Models.Entities;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using GestionImmo.Models.Enum;
 
 namespace GestionImmo.Models.Entities
 {
@@ -20,6 +21,9 @@ namespace GestionImmo.Models.Entities
 
         [Required]
         public string address { get; set; }
+
+        [Required]
+        public Role Role { get; set; }
 
         [Required]
         public string phone { get; set; }

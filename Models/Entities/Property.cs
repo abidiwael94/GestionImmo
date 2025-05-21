@@ -1,4 +1,5 @@
 ﻿using GestionImmo.Models.Entities;
+using GestionImmo.Models.Enum;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +16,10 @@ namespace GestionImmo.Models.Entities
         [Required]
         public string Address { get; set; }
 
+        [Required]
+        public PropertyStatut Status { get; set; }
+
+        [Required]
         public Guid UserId { get; set; }
 
         [ForeignKey("UserId")]

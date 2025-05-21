@@ -1,6 +1,6 @@
 ﻿namespace GestionImmo.Models.Enum
 {
-    public enum StatutBien {
+    public enum PropertyStatut {
         AVAILABLE,
         RENTED,
         SOLDOUT

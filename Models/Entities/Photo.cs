@@ -12,7 +12,7 @@ namespace GestionImmo.Models.Entities
         public string Path { get; set; }
 
         [Required]
-        public Guid PropertyID { get; set; }
+        public Guid PropertyId { get; set; }
 
         [ForeignKey("PropertyId")]
         [InverseProperty("Photos")]
