@@ -64,6 +64,32 @@
   },
   {
     "ContainingType": "GestionImmo.Controllers.FavoritesController",
+    "Method": "GetFavoritesByUser",
+    "RelativePath": "api/Favorites/by-user/{userId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.FavoritesController",
+    "Method": "GetFavoritesCount",
+    "RelativePath": "api/Favorites/count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.FavoritesController",
     "Method": "HasFavorite",
     "RelativePath": "api/Favorites/has-favorite/{userId}",
     "HttpMethod": "GET",
@@ -76,6 +102,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.FavoritesController",
+    "Method": "GetFavoritesOrderedByDate",
+    "RelativePath": "api/Favorites/ordered-by-date",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
