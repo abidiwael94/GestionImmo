@@ -1,7 +1,9 @@
 ﻿using GestionImmo.Data;
+using GestionImmo.Models.DTO;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using GestionImmo.Models.Entities;
 
 namespace GestionImmo.Controllers
 {
@@ -11,7 +13,8 @@ namespace GestionImmo.Controllers
     {
         private readonly ApplicationDbContext dbContext;
 
-        public FavoritesController(ApplicationDbContext dbContext) {
+        public FavoritesController(ApplicationDbContext dbContext)
+        {
             this.dbContext = dbContext;
         }
 
@@ -25,5 +28,83 @@ namespace GestionImmo.Controllers
 
             return Ok(favorites);
         }
+        [HttpGet("by-user/{userId}")]
+        public IActionResult GetFavoritesByUser(Guid userId)
+        {
+            var favorites = dbContext.Favorites
+                .Where(f => f.CreatedById == userId)
+                .Include(f => f.Property)
+                .ToList();
+
+            return Ok(favorites);
+        }
+
+        [HttpGet("ordered-by-date")]
+        public IActionResult GetFavoritesOrderedByDate()
+        {
+            var favorites = dbContext.Favorites
+                .OrderByDescending(f => f.CreatedAt)
+                .Include(f => f.Property)
+                .ToList();
+
+            return Ok(favorites);
+        }
+
+        [HttpPost]
+        public IActionResult AddFavorite(FavoriteDto favorite)
+        {
+            var Newfavorite = new Favorite
+            {
+                PropertyId = favorite.PropertyId,
+                CreatedById = favorite.CreatedById,
+                CreatedAt = DateTime.UtcNow
+            };
+            dbContext.Favorites.Add(Newfavorite);
+            dbContext.SaveChanges();
+            return Ok(Newfavorite);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult UpdateFavorite(Guid id, FavoriteDto favorite)
+        {
+            var existingFavorite = dbContext.Favorites.Find(id);
+            if (existingFavorite == null)
+            {
+                return NotFound();
+            }
+            existingFavorite.PropertyId = favorite.PropertyId;
+            existingFavorite.CreatedById = favorite.CreatedById;
+            existingFavorite.CreatedAt = DateTime.UtcNow;
+            dbContext.SaveChanges();
+            return Ok(existingFavorite);
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteFavorite(Guid id)
+        {
+            var favorite = dbContext.Favorites.Find(id);
+            if (favorite == null)
+            {
+                return NotFound();
+            }
+            dbContext.Favorites.Remove(favorite);
+            dbContext.SaveChanges();
+            return NoContent();
+        }
+
+        [HttpGet("has-favorite/{userId}")]
+        public IActionResult HasFavorite(Guid userId)
+        {
+            bool hasFavorite = dbContext.Favorites.Any(f => f.CreatedById == userId);
+            return Ok(hasFavorite);
+        }
+
+        [HttpGet("count")]
+        public IActionResult GetFavoritesCount()
+        {
+            int count = dbContext.Favorites.Count();
+            return Ok(count);
+        }
+
     }
 }
