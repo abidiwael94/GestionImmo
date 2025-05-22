@@ -115,6 +115,111 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotos",
+    "RelativePath": "api/Photo",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "AddPhoto",
+    "RelativePath": "api/Photo",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "photoDto",
+        "Type": "GestionImmo.Models.DTO.PhotoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotoById",
+    "RelativePath": "api/Photo/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "UpdatePhoto",
+    "RelativePath": "api/Photo/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "photoDto",
+        "Type": "GestionImmo.Models.DTO.PhotoDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "DeletePhoto",
+    "RelativePath": "api/Photo/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotosByProperty",
+    "RelativePath": "api/Photo/by-property/{propertyId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "propertyId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotoCount",
+    "RelativePath": "api/Photo/count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "GestionImmo.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",

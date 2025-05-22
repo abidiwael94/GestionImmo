@@ -34,6 +34,7 @@ namespace GestionImmo.Controllers
             var favorites = dbContext.Favorites
                 .Where(f => f.CreatedById == userId)
                 .Include(f => f.Property)
+                .Include(f => f.CreatedBy)
                 .ToList();
 
             return Ok(favorites);
@@ -45,6 +46,7 @@ namespace GestionImmo.Controllers
             var favorites = dbContext.Favorites
                 .OrderByDescending(f => f.CreatedAt)
                 .Include(f => f.Property)
+                .Include(f => f.CreatedBy)
                 .ToList();
 
             return Ok(favorites);
