@@ -179,10 +179,17 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/Visits": {
       "get": {
         "tags": [
           "Visits"
+=======
+    "/api/Photo": {
+      "get": {
+        "tags": [
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "responses": {
           "200": {
@@ -192,23 +199,39 @@
       },
       "post": {
         "tags": [
+<<<<<<< HEAD
           "Visits"
+=======
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "requestBody": {
           "content": {
             "application/json": {
               "schema": {
+<<<<<<< HEAD
                 "$ref": "#/components/schemas/VisitDTO"
+=======
+                "$ref": "#/components/schemas/PhotoDto"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
               }
             },
             "text/json": {
               "schema": {
+<<<<<<< HEAD
                 "$ref": "#/components/schemas/VisitDTO"
+=======
+                "$ref": "#/components/schemas/PhotoDto"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
               }
             },
             "application/*+json": {
               "schema": {
+<<<<<<< HEAD
                 "$ref": "#/components/schemas/VisitDTO"
+=======
+                "$ref": "#/components/schemas/PhotoDto"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
               }
             }
           }
@@ -220,10 +243,17 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/Visits/{id}": {
       "get": {
         "tags": [
           "Visits"
+=======
+    "/api/Photo/{id}": {
+      "get": {
+        "tags": [
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "parameters": [
           {
@@ -244,7 +274,11 @@
       },
       "put": {
         "tags": [
+<<<<<<< HEAD
           "Visits"
+=======
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "parameters": [
           {
@@ -261,17 +295,29 @@
           "content": {
             "application/json": {
               "schema": {
+<<<<<<< HEAD
                 "$ref": "#/components/schemas/VisitDTO"
+=======
+                "$ref": "#/components/schemas/PhotoDto"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
               }
             },
             "text/json": {
               "schema": {
+<<<<<<< HEAD
                 "$ref": "#/components/schemas/VisitDTO"
+=======
+                "$ref": "#/components/schemas/PhotoDto"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
               }
             },
             "application/*+json": {
               "schema": {
+<<<<<<< HEAD
                 "$ref": "#/components/schemas/VisitDTO"
+=======
+                "$ref": "#/components/schemas/PhotoDto"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
               }
             }
           }
@@ -284,7 +330,11 @@
       },
       "delete": {
         "tags": [
+<<<<<<< HEAD
           "Visits"
+=======
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "parameters": [
           {
@@ -304,6 +354,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/Visits/user/{userId}": {
       "get": {
         "tags": [
@@ -361,6 +412,12 @@
       "get": {
         "tags": [
           "Visits"
+=======
+    "/api/Photo/by-property/{propertyId}": {
+      "get": {
+        "tags": [
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "parameters": [
           {
@@ -380,6 +437,7 @@
         }
       }
     },
+<<<<<<< HEAD
     "/api/Visits/count-by-date/{propertyId}": {
       "get": {
         "tags": [
@@ -395,6 +453,12 @@
               "format": "uuid"
             }
           }
+=======
+    "/api/Photo/count": {
+      "get": {
+        "tags": [
+          "Photo"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         ],
         "responses": {
           "200": {
@@ -463,6 +527,7 @@
         },
         "additionalProperties": false
       },
+<<<<<<< HEAD
       "VisitDTO": {
         "type": "object",
         "properties": {
@@ -485,6 +550,18 @@
           "visitDate": {
             "type": "string",
             "format": "date-time"
+=======
+      "PhotoDto": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string",
+            "nullable": true
+          },
+          "propertyId": {
+            "type": "string",
+            "format": "uuid"
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
           }
         },
         "additionalProperties": false

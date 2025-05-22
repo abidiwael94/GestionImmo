@@ -115,9 +115,15 @@
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "GetAll",
     "RelativePath": "api/Visits",
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotos",
+    "RelativePath": "api/Photo",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -125,25 +131,42 @@
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "Add",
     "RelativePath": "api/Visits",
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "AddPhoto",
+    "RelativePath": "api/Photo",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
+<<<<<<< HEAD
         "Name": "dto",
         "Type": "GestionImmo.Models.DTO.VisitDTO",
+=======
+        "Name": "photoDto",
+        "Type": "GestionImmo.Models.DTO.PhotoDto",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "GetById",
     "RelativePath": "api/Visits/{id}",
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotoById",
+    "RelativePath": "api/Photo/{id}",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -157,9 +180,15 @@
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "Edit",
     "RelativePath": "api/Visits/{id}",
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "UpdatePhoto",
+    "RelativePath": "api/Photo/{id}",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -170,17 +199,28 @@
         "IsRequired": true
       },
       {
+<<<<<<< HEAD
         "Name": "dto",
         "Type": "GestionImmo.Models.DTO.VisitDTO",
+=======
+        "Name": "photoDto",
+        "Type": "GestionImmo.Models.DTO.PhotoDto",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
         "IsRequired": true
       }
     ],
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "Delete",
     "RelativePath": "api/Visits/{id}",
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "DeletePhoto",
+    "RelativePath": "api/Photo/{id}",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -194,6 +234,7 @@
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "CheckDateAvailability",
     "RelativePath": "api/Visits/check-availability",
@@ -218,6 +259,11 @@
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "GetVisitCountByDate",
     "RelativePath": "api/Visits/count-by-date/{propertyId}",
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotosByProperty",
+    "RelativePath": "api/Photo/by-property/{propertyId}",
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -231,6 +277,7 @@
     "ReturnTypes": []
   },
   {
+<<<<<<< HEAD
     "ContainingType": "GestionImmo.Controllers.VisitsController",
     "Method": "GetUpcomingVisits",
     "RelativePath": "api/Visits/upcoming/{propertyId}",
@@ -260,6 +307,15 @@
         "IsRequired": true
       }
     ],
+=======
+    "ContainingType": "GestionImmo.Controllers.PhotoController",
+    "Method": "GetPhotoCount",
+    "RelativePath": "api/Photo/count",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+>>>>>>> 250d98b192e93dc2ab5c3f2e79f55293e7bf19d5
     "ReturnTypes": []
   },
   {
