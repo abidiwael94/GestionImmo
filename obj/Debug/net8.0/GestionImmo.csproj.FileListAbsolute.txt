@@ -418,3 +418,4 @@ C:\Users\anisr\source\repos\GestionImmo\obj\Debug\net8.0\refint\GestionImmo.dll
 C:\Users\anisr\source\repos\GestionImmo\obj\Debug\net8.0\GestionImmo.pdb
 C:\Users\anisr\source\repos\GestionImmo\obj\Debug\net8.0\GestionImmo.genruntimeconfig.cache
 C:\Users\anisr\source\repos\GestionImmo\obj\Debug\net8.0\ref\GestionImmo.dll
+C:\Users\anisr\source\repos\GestionImmo\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

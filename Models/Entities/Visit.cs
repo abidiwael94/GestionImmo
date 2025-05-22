@@ -12,6 +12,13 @@ namespace GestionImmo.Models.Entities
         [Required]
         public Guid PropertyId { get; set; }
 
+        [Required]
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+
+
+        [Required]
+        public DateTime VisitDate { get; set; }
+
 
         [Required]
         public VisitStatus Status { get; set; }
