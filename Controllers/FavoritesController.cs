@@ -61,7 +61,13 @@ namespace GestionImmo.Controllers
             };
             dbContext.Favorites.Add(Newfavorite);
             dbContext.SaveChanges();
-            return Ok(Newfavorite);
+
+            var resFavorite = dbContext.Favorites
+               .Include(f => f.Property)
+               .Include(f => f.CreatedBy)
+               .FirstOrDefault(f => f.Id == Newfavorite.Id);
+
+            return Ok(resFavorite);
         }
 
         [HttpPut("{id}")]
@@ -76,7 +82,13 @@ namespace GestionImmo.Controllers
             existingFavorite.CreatedById = favorite.CreatedById;
             existingFavorite.CreatedAt = DateTime.UtcNow;
             dbContext.SaveChanges();
-            return Ok(existingFavorite);
+
+            var updatedFavorite = dbContext.Favorites
+                .Include(f => f.Property)
+                .Include(f => f.CreatedBy)
+                .FirstOrDefault(f => f.Id == existingFavorite.Id);
+
+            return Ok(updatedFavorite);
         }
 
         [HttpDelete("{id}")]
