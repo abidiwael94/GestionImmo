@@ -11,6 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using GestionImmo.Models.DTO;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace GestionImmo.Controllers
 {
@@ -32,54 +33,44 @@ namespace GestionImmo.Controllers
             return Convert.ToBase64String(bytes);
         }
 
-        // GET: api/user
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDto>>> GetAll()
+        public IActionResult GetAll()
         {
-            var users = await _context.Users.ToListAsync();
-            var result = users.Select(u => new UserDto
-            {
-                Email = u.email,
-                Password = u.password // Pour sécurité, tu peux choisir de ne pas retourner ça
-            });
-
-            return Ok(result);
+            var users =  _context.Users
+                .Include(f => f.Favorites)
+                .Include(f => f.Visits)
+                .Include(f => f.Properties)
+                .ToList();
+            return Ok(users);
         }
 
-        // GET: api/user/{email}
         [HttpGet("{email}")]
-        public async Task<ActionResult<UserDto>> GetByEmail(string email)
+        public IActionResult GetByEmail(string email)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
-            if (user == null) return NotFound();
-
-            var result = new UserDto
+            var user = _context.Users
+                .Include (f => f.Favorites)
+                .Include(f => f.Visits)
+                .Include(f => f.Properties)
+                .FirstOrDefaultAsync(u => u.email == email);
+            if (user == null)
             {
-                Email = user.email,
-                Password = user.password
-            };
+                return NotFound();
+            }
 
-            return Ok(result);
+            return Ok(user);
         }
 
-        // POST: api/user
         [HttpPost]
-        public async Task<ActionResult<UserDto>> Add([FromBody] UserDto dto)
+        public IActionResult Add(UserDto dto)
         {
-            if (!ModelState.IsValid)
-                return BadRequest(ModelState);
-
-            if (await _context.Users.AnyAsync(u => u.email == dto.Email))
-                return Conflict("Un utilisateur avec cet email existe déjà.");
-
             var user = new User
             {
                 Id = Guid.NewGuid(),
                 email = dto.Email,
                 password = HashPassword(dto.Password),
-                FullName = dto.FullName ?? "Nouveau Utilisateur",
-                address = dto.Address ?? "Adresse par défaut",
-                phone = dto.Phone ?? "00000000",
+                FullName = dto.FullName,
+                address = dto.Address,
+                phone = dto.Phone,
                 
                 Properties = new List<Property>(),
                 Visits = new List<Visit>(),
@@ -87,34 +78,40 @@ namespace GestionImmo.Controllers
             };
 
             _context.Users.Add(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetByEmail), new { email = user.email }, dto);
+            return Ok(user);
         }
 
 
-        // PUT: api/user/{email}
         [HttpPut("{email}")]
-        public async Task<IActionResult> Update(string email, [FromBody] UserDto dto)
+        public  IActionResult Update(string email, [FromBody] UserDto dto)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
+            var user =  _context.Users.FirstOrDefault(u => u.email == email);
             if (user == null) return NotFound();
 
+            
+            user.email = dto.Email;
             user.password = HashPassword(dto.Password);
-            await _context.SaveChangesAsync();
+            user.FullName = dto.FullName ?? user.FullName;
+            user.phone = dto.Phone ?? user.phone;
+            user.address = dto.Address ?? user.address;
+            user.Role = dto.Role ?? user.Role;
+
+            _context.SaveChanges();
 
             return NoContent();
         }
 
-        // DELETE: api/user/{email}
+
         [HttpDelete("{email}")]
-        public async Task<IActionResult> Delete(string email)
+        public IActionResult Delete(string email)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
+            var user = _context.Users.FirstOrDefault(u => u.email == email);
             if (user == null) return NotFound();
 
             _context.Users.Remove(user);
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
 
             return NoContent();
         }
