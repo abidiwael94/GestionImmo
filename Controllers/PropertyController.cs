@@ -56,6 +56,19 @@ namespace GestionImmo.Controllers
         [HttpPost]
         public async Task<ActionResult<Property>> CreateProperty(PropertyCreateDto dto)
         {
+            var user = await _context.Users.FindAsync(dto.UserId);
+            if(user == null)
+            {
+               return BadRequest("L'ID de user ne correspond pas.");
+            }
+
+            if (user.Role != Role.CLIENT )
+            {
+                return BadRequest("Utilisateur n'est pas autorisé");
+            }
+
+
+
             var property = new Property
             {
                 Id = Guid.NewGuid(),
@@ -63,6 +76,7 @@ namespace GestionImmo.Controllers
                 Address = dto.Address,
                 Status = dto.Status == 0 ? PropertyStatut.AVAILABLE : dto.Status,
                 UserId = dto.UserId
+
             };
             _context.Properties.Add(property);
             await _context.SaveChangesAsync();
