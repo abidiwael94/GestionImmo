@@ -5,7 +5,7 @@
 namespace GestionImmo.Migrations
 {
     /// <inheritdoc />
-    public partial class migr123 : Migration
+    public partial class mig12208 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

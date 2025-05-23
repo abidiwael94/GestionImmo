@@ -59,7 +59,7 @@ namespace GestionImmo.Controllers
                return BadRequest("L'ID de user ne correspond pas.");
             }
 
-            if (user.Role != Role.CLIENT )
+            if (user.Role == Role.CLIENT )
             {
                 return BadRequest("Utilisateur n'est pas autorisé");
             }

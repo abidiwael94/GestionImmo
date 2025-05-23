@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionImmo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250523150820_mig12206")]
+    [Migration("20250523171206_mig12206")]
     partial class mig12206
     {
         /// <inheritdoc />
