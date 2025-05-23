@@ -2,6 +2,8 @@ using GestionImmo.Data;
 using GestionImmo.Models.Dtos;
 using GestionImmo.Models.Entities;
 using GestionImmo.Models.Enum;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,9 +19,12 @@ namespace GestionImmo.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public AuthController(ApplicationDbContext context)
+        private readonly IEmailSender _emailSender;
+
+        public AuthController(ApplicationDbContext context, IEmailSender emailSender)
         {
             _context = context;
+            _emailSender = emailSender;
         }
 
         private string HashPassword(string password)
@@ -53,6 +58,11 @@ namespace GestionImmo.Controllers
 
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
+
+            // Send welcome email
+            var subject = "Bienvenue chez GestionImmo !";
+            var body = $"<h1>Bonjour {user.FullName},</h1><p>Merci pour votre inscription.</p>";
+            await _emailSender.SendEmailAsync(user.email, subject, body);
 
             return Ok("Utilisateur enregistré");
         }

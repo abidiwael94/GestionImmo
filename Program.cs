@@ -2,6 +2,8 @@ using System.Text.Json.Serialization;
 using GestionImmo.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +24,8 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddTransient<IEmailSender, GestionImmo.Service.EmailSender>();
 
 var app = builder.Build();
 
