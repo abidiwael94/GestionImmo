@@ -22,23 +22,23 @@ namespace GestionImmo.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public  IActionResult GetAll()
         {
-            var visits = await _context.Visits
+            var visits = _context.Visits
                 .Include(v => v.Property)
                 .Include(v => v.User)
-                .ToListAsync();
+                .ToList();
 
             return Ok(visits);
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public  IActionResult GetById(Guid id)
         {
-            var visit = await _context.Visits
+            var visit = _context.Visits
                 .Include(v => v.Property)
                 .Include(v => v.User)
-                .FirstOrDefaultAsync(v => v.Id == id);
+                .FirstOrDefault(v => v.Id == id);
 
             if (visit == null) return NotFound();
 
@@ -46,9 +46,9 @@ namespace GestionImmo.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] VisitDTO dto)
+        public IActionResult Add([FromBody] VisitDTO dto)
         {
-            var user = await _context.Users.FindAsync(dto.UserId);
+            var user = _context.Users.Find(dto.UserId);
             if (user == null) return BadRequest("Invalid user.");
 
             if (user.Role != Role.CLIENT)
@@ -60,32 +60,30 @@ namespace GestionImmo.Controllers
                 PropertyId = dto.PropertyId,
                 UserId = dto.UserId,
                 VisitDate = dto.VisitDate,
-                Status = VisitStatus.WAITING // Only WAITING allowed for clients
+                Status = VisitStatus.WAITING 
             };
 
             _context.Visits.Add(visit);
-            await _context.SaveChangesAsync();
+            _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetById), new { id = visit.Id }, visit);
+            return Ok(visit);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Edit(Guid id, [FromBody] VisitDTO dto)
+        public IActionResult Edit(Guid id, [FromBody] VisitDTO dto)
         {
-            var visit = await _context.Visits.FindAsync(id);
+            var visit =  _context.Visits.Find(id);
             if (visit == null) return NotFound();
 
-            var user = await _context.Users.FindAsync(dto.UserId);
+            var user =  _context.Users.Find(dto.UserId);
             if (user == null) return BadRequest("Invalid user.");
 
             if (!Enum.TryParse<VisitStatus>(dto.Status, out var newStatus))
                 return BadRequest("Invalid status.");
 
-            // CLIENT cannot update anything
             if (user.Role == Role.CLIENT)
                 return Forbid("Clients are not allowed to modify visits.");
 
-            // AGENT can update status to CONFIRMED, REFUSED, REPORTED
             if (user.Role == Role.AGENT)
             {
                 if (newStatus != VisitStatus.CONFIRMED &&
@@ -103,39 +101,39 @@ namespace GestionImmo.Controllers
             visit.UserId = dto.UserId;
 
             _context.Visits.Update(visit);
-            await _context.SaveChangesAsync();
+             _context.SaveChanges();
 
             return NoContent();
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public  IActionResult Delete(Guid id)
         {
-            var visit = await _context.Visits.FindAsync(id);
+            var visit =  _context.Visits.Find(id);
             if (visit == null) return NotFound();
 
             _context.Visits.Remove(visit);
-            await _context.SaveChangesAsync();
+             _context.SaveChanges();
 
             return NoContent();
         }
 
         [HttpGet("user/{userId}")]
-        public async Task<IActionResult> GetByUserId(Guid userId)
+        public  IActionResult GetByUserId(Guid userId)
         {
-            var visits = await _context.Visits
+            var visits =  _context.Visits
                 .Where(v => v.UserId == userId)
                 .Include(v => v.Property)
-                .ToListAsync();
+                .ToList();
 
             return Ok(visits);
         }
 
         [HttpGet("check-availability")]
-        public async Task<IActionResult> CheckDateAvailability(Guid propertyId, DateTime date)
+        public IActionResult CheckDateAvailability(Guid propertyId, DateTime date)
         {
-            var isAvailable = !await _context.Visits
-                .AnyAsync(v => v.PropertyId == propertyId &&
+            var isAvailable = ! _context.Visits
+                .Any(v => v.PropertyId == propertyId &&
                                v.VisitDate.Date == date.Date);
 
             return Ok(new { available = isAvailable });
@@ -178,13 +176,13 @@ namespace GestionImmo.Controllers
         }
 
         [HttpGet("pending")]
-        public async Task<IActionResult> GetPendingVisits()
+        public IActionResult GetPendingVisits()
         {
-            var visits = await _context.Visits
+            var visits =  _context.Visits
                 .Where(v => v.Status == VisitStatus.WAITING)
                 .Include(v => v.Property)
                 .Include(v => v.User)
-                .ToListAsync();
+                .ToList();
 
             return Ok(visits);
         }
