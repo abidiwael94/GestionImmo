@@ -20,6 +20,10 @@ namespace GestionImmo.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<User>()
+            .Property(u => u.Role)
+            .HasConversion<string>();
+
             modelBuilder.Entity<User>().HasData(
                 new User
                 {

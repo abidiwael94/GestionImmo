@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using GestionImmo.Data;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
@@ -12,6 +13,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.Preserve;
         options.JsonSerializerOptions.WriteIndented = true;
         options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); 
+
     });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

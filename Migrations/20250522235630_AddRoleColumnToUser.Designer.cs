@@ -4,6 +4,7 @@ using GestionImmo.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionImmo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250522235630_AddRoleColumnToUser")]
+    partial class AddRoleColumnToUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,9 +106,8 @@ namespace GestionImmo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("address")
                         .IsRequired()
@@ -132,7 +134,7 @@ namespace GestionImmo.Migrations
                         {
                             Id = new Guid("3ab35ede-7489-49f6-af05-f7043cd74093"),
                             FullName = "admin S",
-                            Role = "ADMIN",
+                            Role = 0,
                             address = "Tunis",
                             email = "se@admin.com",
                             password = "password123",
@@ -142,7 +144,7 @@ namespace GestionImmo.Migrations
                         {
                             Id = new Guid("95bd3141-36a9-4dd6-adf1-291875bb8c83"),
                             FullName = "agent S",
-                            Role = "AGENT",
+                            Role = 1,
                             address = "Ariana",
                             email = "s@eagent.com",
                             password = "password456",
