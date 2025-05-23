@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionImmo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250521205240_migration1")]
-    partial class migration1
+    [Migration("20250523094934_AddRoleToUser")]
+    partial class AddRoleToUser
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -128,6 +128,28 @@ namespace GestionImmo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("3ab35ede-7489-49f6-af05-f7043cd74093"),
+                            FullName = "admin S",
+                            Role = 0,
+                            address = "Tunis",
+                            email = "se@admin.com",
+                            password = "password123",
+                            phone = "20202020"
+                        },
+                        new
+                        {
+                            Id = new Guid("95bd3141-36a9-4dd6-adf1-291875bb8c83"),
+                            FullName = "agent S",
+                            Role = 1,
+                            address = "Ariana",
+                            email = "s@eagent.com",
+                            password = "password456",
+                            phone = "30303030"
+                        });
                 });
 
             modelBuilder.Entity("GestionImmo.Models.Entities.Visit", b =>
@@ -135,6 +157,9 @@ namespace GestionImmo.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<Guid>("PropertyId")
                         .HasColumnType("uniqueidentifier");
@@ -144,6 +169,9 @@ namespace GestionImmo.Migrations
 
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("VisitDate")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

@@ -10,7 +10,7 @@ namespace GestionImmo.Models.Entities
         [Key]
         public Guid Id { get; set; }
 
-        [Required]
+       
         public string FullName { get; set; }
 
         [Required]
@@ -19,13 +19,13 @@ namespace GestionImmo.Models.Entities
         [Required]
         public string password { get; set; }
 
-        [Required]
+        
         public string address { get; set; }
 
-        [Required]
+
         public Role Role { get; set; }
 
-        [Required]
+        
         public string phone { get; set; }
 
         [InverseProperty("User")]
