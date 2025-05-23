@@ -21,7 +21,6 @@ namespace GestionImmo.Controllers
             _context = context;
         }
 
-        // GET: api/Property
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
         {
@@ -35,7 +34,6 @@ namespace GestionImmo.Controllers
             return Ok(properties);
         }
 
-        // GET: api/Property/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Property>> GetProperty(Guid id)
         {
@@ -52,7 +50,6 @@ namespace GestionImmo.Controllers
             return Ok(property);
         }
 
-        // POST: api/Property
         [HttpPost]
         public async Task<ActionResult<Property>> CreateProperty(PropertyCreateDto dto)
         {
@@ -85,7 +82,6 @@ namespace GestionImmo.Controllers
         }
 
 
-        // PUT: api/Property/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProperty(Guid id, [FromBody] PropertyUpdateDto dto)
         {
@@ -96,7 +92,6 @@ namespace GestionImmo.Controllers
             if (property == null)
                 return NotFound();
 
-            // Mettre à jour les champs
             property.Description = dto.Description;
             property.Address = dto.Address;
             property.Status = dto.Status;
@@ -108,7 +103,6 @@ namespace GestionImmo.Controllers
         }
 
 
-        // DELETE: api/Property/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProperty(Guid id)
         {

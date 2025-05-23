@@ -1,4 +1,5 @@
 using GestionImmo.Data;
+using GestionImmo.Models.DTO;
 using GestionImmo.Models.Dtos;
 using GestionImmo.Models.Entities;
 using GestionImmo.Models.Enum;
@@ -59,7 +60,6 @@ namespace GestionImmo.Controllers
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
-            // Send welcome email
             var subject = "Bienvenue chez GestionImmo !";
             var body = $"<h1>Bonjour {user.FullName},</h1><p>Merci pour votre inscription.</p>";
             await _emailSender.SendEmailAsync(user.email, subject, body);
@@ -68,7 +68,7 @@ namespace GestionImmo.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserDto dto)
+        public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.email == dto.Email);
             if (user == null || !VerifyPassword(dto.Password, user.password))
