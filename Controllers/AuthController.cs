@@ -43,12 +43,12 @@ namespace GestionImmo.Controllers
             var user = new User
             {
                 Id = Guid.NewGuid(),
-                FullName = "Nouveau Utilisateur",
+                FullName = dto.FullName,
                 email = dto.Email,
                 password = HashPassword(dto.Password),
-                address = "Adresse par défaut",
+                address = dto.Address,
                 Role = Role.CLIENT,
-                phone = "00000000"
+                phone = dto.Phone
             };
 
             _context.Users.Add(user);
