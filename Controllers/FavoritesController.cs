@@ -34,7 +34,6 @@ namespace GestionImmo.Controllers
             var favorites = dbContext.Favorites
                 .Where(f => f.CreatedById == userId)
                 .Include(f => f.Property)
-                .Include(f => f.CreatedBy)
                 .ToList();
 
             return Ok(favorites);
@@ -46,7 +45,6 @@ namespace GestionImmo.Controllers
             var favorites = dbContext.Favorites
                 .OrderByDescending(f => f.CreatedAt)
                 .Include(f => f.Property)
-                .Include(f => f.CreatedBy)
                 .ToList();
 
             return Ok(favorites);
@@ -63,13 +61,7 @@ namespace GestionImmo.Controllers
             };
             dbContext.Favorites.Add(Newfavorite);
             dbContext.SaveChanges();
-
-            var resFavorite = dbContext.Favorites
-               .Include(f => f.Property)
-               .Include(f => f.CreatedBy)
-               .FirstOrDefault(f => f.Id == Newfavorite.Id);
-
-            return Ok(resFavorite);
+            return Ok(Newfavorite);
         }
 
         [HttpPut("{id}")]
@@ -84,13 +76,7 @@ namespace GestionImmo.Controllers
             existingFavorite.CreatedById = favorite.CreatedById;
             existingFavorite.CreatedAt = DateTime.UtcNow;
             dbContext.SaveChanges();
-
-            var updatedFavorite = dbContext.Favorites
-                .Include(f => f.Property)
-                .Include(f => f.CreatedBy)
-                .FirstOrDefault(f => f.Id == existingFavorite.Id);
-
-            return Ok(updatedFavorite);
+            return Ok(existingFavorite);
         }
 
         [HttpDelete("{id}")]
