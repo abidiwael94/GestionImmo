@@ -54,17 +54,11 @@ namespace GestionImmo.Controllers
         public async Task<ActionResult<Property>> CreateProperty(PropertyCreateDto dto)
         {
             var user = await _context.Users.FindAsync(dto.UserId);
-            if(user == null)
-            {
-               return BadRequest("L'ID de user ne correspond pas.");
-            }
+            if (user == null)
+                return BadRequest("L'ID de user ne correspond pas.");
 
-            if (user.Role == Role.CLIENT )
-            {
+            if (user.Role == Role.CLIENT)
                 return BadRequest("Utilisateur n'est pas autorisé");
-            }
-
-
 
             var property = new Property
             {
@@ -72,15 +66,38 @@ namespace GestionImmo.Controllers
                 Description = dto.Description,
                 Address = dto.Address,
                 Status = dto.Status == 0 ? PropertyStatut.AVAILABLE : dto.Status,
-                UserId = dto.UserId
+                UserId = dto.UserId,
 
+                // New fields
+                Bedrooms = dto.Bedrooms,
+                Bathrooms = dto.Bathrooms,
+                SquareFeet = dto.SquareFeet,
+                LotSize = dto.LotSize,
+                YearBuilt = dto.YearBuilt,
+                PropertyType = dto.PropertyType,
+                Floor = dto.Floor,
+                TotalFloors = dto.TotalFloors,
+                HasGarage = dto.HasGarage,
+                GarageSpaces = dto.GarageSpaces,
+                HasBasement = dto.HasBasement,
+                HasPool = dto.HasPool,
+                HasElevator = dto.HasElevator,
+                Furnished = dto.Furnished,
+                Condition = dto.Condition,
+                HeatingType = dto.HeatingType,
+                CoolingType = dto.CoolingType,
+                ZipCode = dto.ZipCode,
+                Latitude = dto.Latitude,
+                Longitude = dto.Longitude,
+                ListingDate = dto.ListingDate,
+                EstimatedPrice = dto.EstimatedPrice
             };
+
             _context.Properties.Add(property);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(GetProperty), new { id = property.Id }, property);
         }
-
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProperty(Guid id, [FromBody] PropertyUpdateDto dto)
@@ -92,16 +109,40 @@ namespace GestionImmo.Controllers
             if (property == null)
                 return NotFound();
 
+            // Basic fields
             property.Description = dto.Description;
             property.Address = dto.Address;
             property.Status = dto.Status;
             property.UserId = dto.UserId;
 
+            // Updated fields
+            property.Bedrooms = dto.Bedrooms;
+            property.Bathrooms = dto.Bathrooms;
+            property.SquareFeet = dto.SquareFeet;
+            property.LotSize = dto.LotSize;
+            property.YearBuilt = dto.YearBuilt;
+            property.PropertyType = dto.PropertyType;
+            property.Floor = dto.Floor;
+            property.TotalFloors = dto.TotalFloors;
+            property.HasGarage = dto.HasGarage;
+            property.GarageSpaces = dto.GarageSpaces;
+            property.HasBasement = dto.HasBasement;
+            property.HasPool = dto.HasPool;
+            property.HasElevator = dto.HasElevator;
+            property.Furnished = dto.Furnished;
+            property.Condition = dto.Condition;
+            property.HeatingType = dto.HeatingType;
+            property.CoolingType = dto.CoolingType;
+            property.ZipCode = dto.ZipCode;
+            property.Latitude = dto.Latitude;
+            property.Longitude = dto.Longitude;
+            property.ListingDate = dto.ListingDate;
+            property.EstimatedPrice = dto.EstimatedPrice;
+
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
-
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProperty(Guid id)
