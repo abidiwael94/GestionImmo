@@ -71,6 +71,18 @@ builder.Services.AddTransient<IEmailSender, GestionImmo.Service.EmailSender>();
 // 🔐 JWT Auth
 builder.Services.AddScoped<JwtService>();
 
+// ----------------------------
+// 🔧 CORS pour Angular
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAngular", policy =>
+    {
+        policy.WithOrigins("http://localhost:4200")
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -110,7 +122,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication(); // ⚠️ Avant Authorization
+app.UseCors("AllowAngular");
+
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

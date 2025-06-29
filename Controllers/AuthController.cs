@@ -3,7 +3,7 @@ using GestionImmo.Models.DTO;
 using GestionImmo.Models.Dtos;
 using GestionImmo.Models.Entities;
 using GestionImmo.Models.Enum;
-using GestionImmo.Services; // Assure-toi que JwtService est ici
+using GestionImmo.Services;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -41,11 +41,14 @@ namespace GestionImmo.Controllers
             return HashPassword(password) == hash;
         }
 
+        // ✅ REGISTER
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto dto)
         {
             if (await _context.Users.AnyAsync(u => u.email == dto.Email))
-                return BadRequest("Email déjà utilisé");
+            {
+                return BadRequest(new { message = "Email déjà utilisé" });
+            }
 
             var user = new User
             {
@@ -65,23 +68,47 @@ namespace GestionImmo.Controllers
             var body = $"<h1>Bonjour {user.FullName},</h1><p>Merci pour votre inscription.</p>";
             await _emailSender.SendEmailAsync(user.email, subject, body);
 
-            return Ok("Utilisateur enregistré");
+            // ✅ Répond avec un JSON
+            return Ok(new
+            {
+                message = "Utilisateur enregistré avec succès",
+                user = new
+                {
+                    user.Id,
+                    user.FullName,
+                    user.email,
+                    user.address,
+                    user.phone,
+                    role = user.Role.ToString()
+                }
+            });
         }
 
+        // ✅ LOGIN
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.email == dto.Email);
             if (user == null || !VerifyPassword(dto.Password, user.password))
-                return Unauthorized("Identifiants invalides");
+            {
+                return Unauthorized(new { message = "Identifiants invalides" });
+            }
 
-            // 🔐 Générer le token JWT
             var token = _jwtService.GenerateToken(user);
 
             return Ok(new
             {
                 message = "Connexion réussie",
-                token
+                token,
+                user = new
+                {
+                    user.Id,
+                    user.FullName,
+                    user.email,
+                    user.address,
+                    user.phone,
+                    role = user.Role.ToString()
+                }
             });
         }
     }
