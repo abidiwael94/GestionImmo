@@ -54,7 +54,7 @@ namespace GestionImmo.Controllers
                 email = dto.Email,
                 password = HashPassword(dto.Password),
                 address = dto.Address,
-                Role = Role.CLIENT,
+                Role = dto.Role ?? Role.CLIENT,
                 phone = dto.Phone
             };
 
