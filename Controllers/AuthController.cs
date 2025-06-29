@@ -1,9 +1,9 @@
-using GestionImmo.Data;
+Ôªøusing GestionImmo.Data;
 using GestionImmo.Models.DTO;
 using GestionImmo.Models.Dtos;
 using GestionImmo.Models.Entities;
 using GestionImmo.Models.Enum;
-using Microsoft.AspNetCore.Identity;
+using GestionImmo.Services; // Assure-toi que JwtService est ici
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,13 +19,14 @@ namespace GestionImmo.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
-
         private readonly IEmailSender _emailSender;
+        private readonly JwtService _jwtService;
 
-        public AuthController(ApplicationDbContext context, IEmailSender emailSender)
+        public AuthController(ApplicationDbContext context, IEmailSender emailSender, JwtService jwtService)
         {
             _context = context;
             _emailSender = emailSender;
+            _jwtService = jwtService;
         }
 
         private string HashPassword(string password)
@@ -44,7 +45,7 @@ namespace GestionImmo.Controllers
         public async Task<IActionResult> Register([FromBody] UserDto dto)
         {
             if (await _context.Users.AnyAsync(u => u.email == dto.Email))
-                return BadRequest("Email dÈj‡ utilisÈ");
+                return BadRequest("Email d√©j√† utilis√©");
 
             var user = new User
             {
@@ -64,7 +65,7 @@ namespace GestionImmo.Controllers
             var body = $"<h1>Bonjour {user.FullName},</h1><p>Merci pour votre inscription.</p>";
             await _emailSender.SendEmailAsync(user.email, subject, body);
 
-            return Ok("Utilisateur enregistrÈ");
+            return Ok("Utilisateur enregistr√©");
         }
 
         [HttpPost("login")]
@@ -74,7 +75,14 @@ namespace GestionImmo.Controllers
             if (user == null || !VerifyPassword(dto.Password, user.password))
                 return Unauthorized("Identifiants invalides");
 
-            return Ok("Connexion rÈussie");
+            // üîê G√©n√©rer le token JWT
+            var token = _jwtService.GenerateToken(user);
+
+            return Ok(new
+            {
+                message = "Connexion r√©ussie",
+                token
+            });
         }
     }
 }

@@ -1,17 +1,14 @@
 ﻿using GestionImmo.Data;
-using GestionImmo.Models.Entities;
+using GestionImmo.Models.DTO;
 using GestionImmo.Models.Dtos;
+using GestionImmo.Models.Entities;
 using GestionImmo.Models.Enum;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
-using GestionImmo.Models.DTO;
-using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace GestionImmo.Controllers
 {
@@ -33,35 +30,57 @@ namespace GestionImmo.Controllers
             return Convert.ToBase64String(bytes);
         }
 
-        [HttpGet]
-        public IActionResult GetAll()
+        // 🔐 Route protégée par JWT
+        [Authorize]
+        [HttpGet("profil")]
+        public async Task<IActionResult> GetProfile()
         {
-            var users =  _context.Users
+            var email = User.FindFirst(ClaimTypes.Email)?.Value;
+
+            if (email == null)
+                return Unauthorized();
+
+            var user = await _context.Users
                 .Include(f => f.Favorites)
                 .Include(f => f.Visits)
                 .Include(f => f.Properties)
-                .ToList();
+                .FirstOrDefaultAsync(u => u.email == email);
+
+            if (user == null)
+                return NotFound();
+
+            return Ok(user);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var users = await _context.Users
+                .Include(f => f.Favorites)
+                .Include(f => f.Visits)
+                .Include(f => f.Properties)
+                .ToListAsync();
+
             return Ok(users);
         }
 
         [HttpGet("{email}")]
-        public IActionResult GetByEmail(string email)
+        public async Task<IActionResult> GetByEmail(string email)
         {
-            var user = _context.Users
-                .Include (f => f.Favorites)
+            var user = await _context.Users
+                .Include(f => f.Favorites)
                 .Include(f => f.Visits)
                 .Include(f => f.Properties)
                 .FirstOrDefaultAsync(u => u.email == email);
+
             if (user == null)
-            {
                 return NotFound();
-            }
 
             return Ok(user);
         }
 
         [HttpPost]
-        public IActionResult Add(UserDto dto)
+        public async Task<IActionResult> Add(UserDto dto)
         {
             var user = new User
             {
@@ -71,26 +90,24 @@ namespace GestionImmo.Controllers
                 FullName = dto.FullName,
                 address = dto.Address,
                 phone = dto.Phone,
-                
+                Role = Role.CLIENT,
                 Properties = new List<Property>(),
                 Visits = new List<Visit>(),
                 Favorites = new List<Favorite>()
             };
 
             _context.Users.Add(user);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return Ok(user);
         }
 
-
         [HttpPut("{email}")]
-        public  IActionResult Update(string email, [FromBody] UserDto dto)
+        public async Task<IActionResult> Update(string email, [FromBody] UserDto dto)
         {
-            var user =  _context.Users.FirstOrDefault(u => u.email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
             if (user == null) return NotFound();
 
-            
             user.email = dto.Email;
             user.password = HashPassword(dto.Password);
             user.FullName = dto.FullName ?? user.FullName;
@@ -98,20 +115,19 @@ namespace GestionImmo.Controllers
             user.address = dto.Address ?? user.address;
             user.Role = dto.Role ?? user.Role;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-
         [HttpDelete("{email}")]
-        public IActionResult Delete(string email)
+        public async Task<IActionResult> Delete(string email)
         {
-            var user = _context.Users.FirstOrDefault(u => u.email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.email == email);
             if (user == null) return NotFound();
 
             _context.Users.Remove(user);
-            _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return NoContent();
         }

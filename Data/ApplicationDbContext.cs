@@ -14,16 +14,16 @@ namespace GestionImmo.Data
         public DbSet<Visit> Visits { get; set; }
         public DbSet<Favorite> Favorites { get; set; }
 
-
-
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            // Stocker Role en tant que string (ex: "ADMIN")
             modelBuilder.Entity<User>()
-            .Property(u => u.Role)
-            .HasConversion<string>();
+                .Property(u => u.Role)
+                .HasConversion<string>();
 
+            // Seed de données pour les utilisateurs
             modelBuilder.Entity<User>().HasData(
                 new User
                 {
@@ -46,6 +46,8 @@ namespace GestionImmo.Data
                     phone = "30303030"
                 }
             );
+
+            // Relations entre les entités
 
             modelBuilder.Entity<Property>()
                 .HasOne(p => p.User)
