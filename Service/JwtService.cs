@@ -10,16 +10,22 @@ namespace GestionImmo.Services
 {
     public class JwtService
     {
-        private readonly IConfiguration _config;
+        private readonly string _secretKey;
+        private readonly string _issuer;
+        private readonly string _audience;
+        private readonly double _expirationMinutes;
 
         public JwtService(IConfiguration config)
         {
-            _config = config;
+            _secretKey = config["JwtSettings:SecretKey"];
+            _issuer = config["JwtSettings:Issuer"];
+            _audience = config["JwtSettings:Audience"];
+            _expirationMinutes = Convert.ToDouble(config["JwtSettings:ExpirationMinutes"]);
         }
 
         public string GenerateToken(User user)
         {
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:SecretKey"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var claims = new[]
@@ -30,10 +36,10 @@ namespace GestionImmo.Services
             };
 
             var token = new JwtSecurityToken(
-                issuer: _config["JwtSettings:Issuer"],
-                audience: _config["JwtSettings:Audience"],
+                issuer: _issuer,
+                audience: _audience,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(Convert.ToDouble(_config["JwtSettings:ExpirationMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(_expirationMinutes),
                 signingCredentials: creds
             );
 
