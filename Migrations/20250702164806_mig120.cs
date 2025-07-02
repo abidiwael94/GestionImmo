@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GestionImmo.Migrations
 {
     /// <inheritdoc />
-    public partial class initialcreate : Migration
+    public partial class mig120 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -38,7 +38,29 @@ namespace GestionImmo.Migrations
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Bedrooms = table.Column<int>(type: "int", nullable: false),
+                    Bathrooms = table.Column<int>(type: "int", nullable: false),
+                    SquareFeet = table.Column<double>(type: "float", nullable: false),
+                    LotSize = table.Column<double>(type: "float", nullable: false),
+                    YearBuilt = table.Column<int>(type: "int", nullable: false),
+                    PropertyType = table.Column<int>(type: "int", nullable: false),
+                    Floor = table.Column<int>(type: "int", nullable: false),
+                    TotalFloors = table.Column<int>(type: "int", nullable: false),
+                    HasGarage = table.Column<bool>(type: "bit", nullable: false),
+                    GarageSpaces = table.Column<int>(type: "int", nullable: false),
+                    HasBasement = table.Column<bool>(type: "bit", nullable: false),
+                    HasPool = table.Column<bool>(type: "bit", nullable: false),
+                    HasElevator = table.Column<bool>(type: "bit", nullable: false),
+                    Furnished = table.Column<bool>(type: "bit", nullable: false),
+                    Condition = table.Column<int>(type: "int", nullable: false),
+                    HeatingType = table.Column<int>(type: "int", nullable: false),
+                    CoolingType = table.Column<int>(type: "int", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Latitude = table.Column<double>(type: "float", nullable: false),
+                    Longitude = table.Column<double>(type: "float", nullable: false),
+                    ListingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EstimatedPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
