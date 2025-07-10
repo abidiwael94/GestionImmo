@@ -1,160 +1,189 @@
-using GestionImmo.Data;
-using GestionImmo.Models.Entities;
-using GestionImmo.Models.DTO;
-using GestionImmo.Models.Enum;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+    using GestionImmo.Data;
+    using GestionImmo.Models.Entities;
+    using GestionImmo.Models.DTO;
+    using GestionImmo.Models.Enum;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
 
-namespace GestionImmo.Controllers
-{
-    [ApiController]
-    [Route("api/[controller]")]
-    public class PropertyController : ControllerBase
+    namespace GestionImmo.Controllers
     {
-        private readonly ApplicationDbContext _context;
-
-        public PropertyController(ApplicationDbContext context)
+        [ApiController]
+        [Route("api/[controller]")]
+        public class PropertyController : ControllerBase
         {
-            _context = context;
-        }
+            private readonly ApplicationDbContext _context;
+
+            public PropertyController(ApplicationDbContext context)
+            {
+                _context = context;
+            }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Property>>> GetProperties()
+        public async Task<ActionResult<IEnumerable<PropertyDto>>> GetProperties()
         {
             var properties = await _context.Properties
                 .Include(p => p.User)
-                .Include(p => p.Photos)
-                .Include(p => p.Visits)
-                .Include(p => p.Favorites)
                 .ToListAsync();
 
-            return Ok(properties);
+            var dtoList = properties.Select(p => new PropertyDto
+            {
+                Id = p.Id,
+                Description = p.Description,
+                Address = p.Address,
+                Status = p.Status,
+                UserId = p.UserId,
+                UserFullName = p.User.FullName,
+                Bedrooms = p.Bedrooms,
+                Bathrooms = p.Bathrooms,
+                SquareFeet = p.SquareFeet,
+                LotSize = p.LotSize,
+                YearBuilt = p.YearBuilt,
+                PropertyType = p.PropertyType,
+                Floor = p.Floor,
+                TotalFloors = p.TotalFloors,
+                HasGarage = p.HasGarage,
+                GarageSpaces = p.GarageSpaces,
+                HasBasement = p.HasBasement,
+                HasPool = p.HasPool,
+                HasElevator = p.HasElevator,
+                Furnished = p.Furnished,
+                Condition = p.Condition,
+                HeatingType = p.HeatingType,
+                CoolingType = p.CoolingType,
+                ZipCode = p.ZipCode,
+                Latitude = p.Latitude,
+                Longitude = p.Longitude,
+                ListingDate = p.ListingDate,
+                EstimatedPrice = p.EstimatedPrice
+            });
+
+            return Ok(dtoList);
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Property>> GetProperty(Guid id)
-        {
-            var property = await _context.Properties
-                .Include(p => p.User)
-                .Include(p => p.Photos)
-                .Include(p => p.Visits)
-                .Include(p => p.Favorites)
-                .FirstOrDefaultAsync(p => p.Id == id);
-
-            if (property == null)
-                return NotFound();
-
-            return Ok(property);
-        }
-
-        [HttpPost]
-        public async Task<ActionResult<Property>> CreateProperty(PropertyCreateDto dto)
-        {
-            var user = await _context.Users.FindAsync(dto.UserId);
-            if (user == null)
-                return BadRequest("L'ID de user ne correspond pas.");
-
-            if (user.Role == Role.CLIENT)
-                return BadRequest("Utilisateur n'est pas autorisé");
-
-            var property = new Property
+            public async Task<ActionResult<Property>> GetProperty(Guid id)
             {
-                Id = Guid.NewGuid(),
-                Description = dto.Description,
-                Address = dto.Address,
-                Status = dto.Status == 0 ? PropertyStatut.AVAILABLE : dto.Status,
-                UserId = dto.UserId,
+                var property = await _context.Properties
+                    .Include(p => p.User)
+                    .Include(p => p.Photos)
+                    .Include(p => p.Visits)
+                    .Include(p => p.Favorites)
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
-                // New fields
-                Bedrooms = dto.Bedrooms,
-                Bathrooms = dto.Bathrooms,
-                SquareFeet = dto.SquareFeet,
-                LotSize = dto.LotSize,
-                YearBuilt = dto.YearBuilt,
-                PropertyType = dto.PropertyType,
-                Floor = dto.Floor,
-                TotalFloors = dto.TotalFloors,
-                HasGarage = dto.HasGarage,
-                GarageSpaces = dto.GarageSpaces,
-                HasBasement = dto.HasBasement,
-                HasPool = dto.HasPool,
-                HasElevator = dto.HasElevator,
-                Furnished = dto.Furnished,
-                Condition = dto.Condition,
-                HeatingType = dto.HeatingType,
-                CoolingType = dto.CoolingType,
-                ZipCode = dto.ZipCode,
-                Latitude = dto.Latitude,
-                Longitude = dto.Longitude,
-                ListingDate = dto.ListingDate,
-                EstimatedPrice = dto.EstimatedPrice
-            };
+                if (property == null)
+                    return NotFound();
 
-            _context.Properties.Add(property);
-            await _context.SaveChangesAsync();
+                return Ok(property);
+            }
 
-            return CreatedAtAction(nameof(GetProperty), new { id = property.Id }, property);
-        }
+            [HttpPost]
+            public async Task<ActionResult<Property>> CreateProperty(PropertyCreateDto dto)
+            {
+                var user = await _context.Users.FindAsync(dto.UserId);
+                if (user == null)
+                    return BadRequest("L'ID de user ne correspond pas.");
 
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateProperty(Guid id, [FromBody] PropertyUpdateDto dto)
-        {
-            if (id != dto.Id)
-                return BadRequest("L'ID ne correspond pas.");
+                if (user.Role == Role.CLIENT)
+                    return BadRequest("Utilisateur n'est pas autorisé");
 
-            var property = await _context.Properties.FindAsync(id);
-            if (property == null)
-                return NotFound();
+                var property = new Property
+                {
+                    Id = Guid.NewGuid(),
+                    Description = dto.Description,
+                    Address = dto.Address,
+                    Status = dto.Status == 0 ? PropertyStatut.AVAILABLE : dto.Status,
+                    UserId = dto.UserId,
 
-            // Basic fields
-            property.Description = dto.Description;
-            property.Address = dto.Address;
-            property.Status = dto.Status;
-            property.UserId = dto.UserId;
+                    // New fields
+                    Bedrooms = dto.Bedrooms,
+                    Bathrooms = dto.Bathrooms,
+                    SquareFeet = dto.SquareFeet,
+                    LotSize = dto.LotSize,
+                    YearBuilt = dto.YearBuilt,
+                    PropertyType = dto.PropertyType,
+                    Floor = dto.Floor,
+                    TotalFloors = dto.TotalFloors,
+                    HasGarage = dto.HasGarage,
+                    GarageSpaces = dto.GarageSpaces,
+                    HasBasement = dto.HasBasement,
+                    HasPool = dto.HasPool,
+                    HasElevator = dto.HasElevator,
+                    Furnished = dto.Furnished,
+                    Condition = dto.Condition,
+                    HeatingType = dto.HeatingType,
+                    CoolingType = dto.CoolingType,
+                    ZipCode = dto.ZipCode,
+                    Latitude = dto.Latitude,
+                    Longitude = dto.Longitude,
+                    ListingDate = dto.ListingDate,
+                    EstimatedPrice = dto.EstimatedPrice
+                };
 
-            // Updated fields
-            property.Bedrooms = dto.Bedrooms;
-            property.Bathrooms = dto.Bathrooms;
-            property.SquareFeet = dto.SquareFeet;
-            property.LotSize = dto.LotSize;
-            property.YearBuilt = dto.YearBuilt;
-            property.PropertyType = dto.PropertyType;
-            property.Floor = dto.Floor;
-            property.TotalFloors = dto.TotalFloors;
-            property.HasGarage = dto.HasGarage;
-            property.GarageSpaces = dto.GarageSpaces;
-            property.HasBasement = dto.HasBasement;
-            property.HasPool = dto.HasPool;
-            property.HasElevator = dto.HasElevator;
-            property.Furnished = dto.Furnished;
-            property.Condition = dto.Condition;
-            property.HeatingType = dto.HeatingType;
-            property.CoolingType = dto.CoolingType;
-            property.ZipCode = dto.ZipCode;
-            property.Latitude = dto.Latitude;
-            property.Longitude = dto.Longitude;
-            property.ListingDate = dto.ListingDate;
-            property.EstimatedPrice = dto.EstimatedPrice;
+                _context.Properties.Add(property);
+                await _context.SaveChangesAsync();
 
-            await _context.SaveChangesAsync();
+                return CreatedAtAction(nameof(GetProperty), new { id = property.Id }, property);
+            }
 
-            return NoContent();
-        }
+            [HttpPut("{id}")]
+            public async Task<IActionResult> UpdateProperty(Guid id, [FromBody] PropertyUpdateDto dto)
+            {
+                if (id != dto.Id)
+                    return BadRequest("L'ID ne correspond pas.");
 
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteProperty(Guid id)
-        {
-            var property = await _context.Properties.FindAsync(id);
-            if (property == null)
-                return NotFound();
+                var property = await _context.Properties.FindAsync(id);
+                if (property == null)
+                    return NotFound();
 
-            _context.Properties.Remove(property);
-            await _context.SaveChangesAsync();
+                // Basic fields
+                property.Description = dto.Description;
+                property.Address = dto.Address;
+                property.Status = dto.Status;
+                property.UserId = dto.UserId;
 
-            return NoContent();
+                // Updated fields
+                property.Bedrooms = dto.Bedrooms;
+                property.Bathrooms = dto.Bathrooms;
+                property.SquareFeet = dto.SquareFeet;
+                property.LotSize = dto.LotSize;
+                property.YearBuilt = dto.YearBuilt;
+                property.PropertyType = dto.PropertyType;
+                property.Floor = dto.Floor;
+                property.TotalFloors = dto.TotalFloors;
+                property.HasGarage = dto.HasGarage;
+                property.GarageSpaces = dto.GarageSpaces;
+                property.HasBasement = dto.HasBasement;
+                property.HasPool = dto.HasPool;
+                property.HasElevator = dto.HasElevator;
+                property.Furnished = dto.Furnished;
+                property.Condition = dto.Condition;
+                property.HeatingType = dto.HeatingType;
+                property.CoolingType = dto.CoolingType;
+                property.ZipCode = dto.ZipCode;
+                property.Latitude = dto.Latitude;
+                property.Longitude = dto.Longitude;
+                property.ListingDate = dto.ListingDate;
+                property.EstimatedPrice = dto.EstimatedPrice;
+
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
+
+            [HttpDelete("{id}")]
+            public async Task<IActionResult> DeleteProperty(Guid id)
+            {
+                var property = await _context.Properties.FindAsync(id);
+                if (property == null)
+                    return NotFound();
+
+                _context.Properties.Remove(property);
+                await _context.SaveChangesAsync();
+
+                return NoContent();
+            }
         }
     }
-}

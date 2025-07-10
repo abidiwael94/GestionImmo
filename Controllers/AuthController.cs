@@ -41,7 +41,7 @@ namespace GestionImmo.Controllers
             return HashPassword(password) == hash;
         }
 
-        // ✅ REGISTER
+        //  REGISTER
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] UserDto dto)
         {
@@ -68,7 +68,7 @@ namespace GestionImmo.Controllers
             var body = $"<h1>Bonjour {user.FullName},</h1><p>Merci pour votre inscription.</p>";
             await _emailSender.SendEmailAsync(user.email, subject, body);
 
-            // ✅ Répond avec un JSON
+            //  Répond avec un JSON
             return Ok(new
             {
                 message = "Utilisateur enregistré avec succès",
@@ -84,7 +84,7 @@ namespace GestionImmo.Controllers
             });
         }
 
-        // ✅ LOGIN
+        //  LOGIN
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginDTO dto)
         {
