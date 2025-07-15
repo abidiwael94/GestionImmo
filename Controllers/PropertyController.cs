@@ -1,11 +1,12 @@
     using GestionImmo.Data;
-    using GestionImmo.Models.Entities;
     using GestionImmo.Models.DTO;
+    using GestionImmo.Models.Entities;
     using GestionImmo.Models.Enum;
     using Microsoft.AspNetCore.Mvc;
     using Microsoft.EntityFrameworkCore;
     using System;
     using System.Collections.Generic;
+using System.Text.Json;
     using System.Threading.Tasks;
 
     namespace GestionImmo.Controllers
@@ -89,7 +90,10 @@
                 if (user.Role == Role.CLIENT)
                     return BadRequest("Utilisateur n'est pas autorisé");
 
-                var property = new Property
+            decimal predictedPrice = await PredictEstimatedPriceAsync(dto);
+
+
+            var property = new Property
                 {
                     Id = Guid.NewGuid(),
                     Description = dto.Description,
@@ -119,8 +123,8 @@
                     Latitude = dto.Latitude,
                     Longitude = dto.Longitude,
                     ListingDate = dto.ListingDate,
-                    EstimatedPrice = dto.EstimatedPrice
-                };
+                    EstimatedPrice = predictedPrice
+            };
 
                 _context.Properties.Add(property);
                 await _context.SaveChangesAsync();
@@ -128,7 +132,65 @@
                 return CreatedAtAction(nameof(GetProperty), new { id = property.Id }, property);
             }
 
-            [HttpPut("{id}")]
+
+
+        /// prediction 
+        /// 
+        /// 
+        /// 
+        /// 
+
+
+        private async Task<decimal> PredictEstimatedPriceAsync(PropertyCreateDto dto)
+        {
+            using var httpClient = new HttpClient();
+
+            var payload = new
+            {
+                Bedrooms = dto.Bedrooms,
+                Bathrooms = dto.Bathrooms,
+                SquareFeet = dto.SquareFeet,
+                LotSize = dto.LotSize,
+                YearBuilt = dto.YearBuilt,
+                Floor = dto.Floor,
+                TotalFloors = dto.TotalFloors,
+                HasGarage = dto.HasGarage,
+                GarageSpaces = dto.GarageSpaces,
+                HasBasement = dto.HasBasement,
+                HasPool = dto.HasPool,
+                HasElevator = dto.HasElevator,
+                Furnished = dto.Furnished,
+                ZipCode = dto.ZipCode
+            };
+            var jsonPayload = JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
+            Console.WriteLine("Sending payload to prediction API:\n" + jsonPayload);
+            var response = await httpClient.PostAsJsonAsync("http://localhost:5000/predict", payload);
+
+            if (!response.IsSuccessStatusCode)
+                throw new Exception("Prediction API failed");
+
+            var result = await response.Content.ReadFromJsonAsync<PredictionResponse>();
+            return result.EstimatedPrice;
+        }
+
+        private class PredictionResponse
+        {
+            public decimal EstimatedPrice { get; set; }
+
+            // In case Flask uses snake_case
+            [System.Text.Json.Serialization.JsonPropertyName("estimated_price")]
+            public decimal EstimatedPriceSnakeCase
+            {
+                set => EstimatedPrice = value;
+            }
+        }
+
+
+
+        ///
+
+
+        [HttpPut("{id}")]
             public async Task<IActionResult> UpdateProperty(Guid id, [FromBody] PropertyUpdateDto dto)
             {
                 if (id != dto.Id)
