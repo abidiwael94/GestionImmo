@@ -17,4 +17,12 @@
 		<PackageReference Include="MailKit" Version="4.11.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <EditorConfigFiles Remove="C:\Users\pc\Desktop\GestionImmo\Models\DTO\.editorconfig" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="C:\Users\pc\Desktop\GestionImmo\Models\DTO\.editorconfig" />
+	</ItemGroup>
+
 </Project>

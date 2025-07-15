@@ -8,6 +8,8 @@ namespace GestionImmo.Models.Entities
 {
     public class Property
     {
+        internal string Title;
+
         [Key]
         public Guid Id { get; set; }
 
