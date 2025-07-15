@@ -27,6 +27,7 @@ using System.Text.Json;
         {
             var properties = await _context.Properties
                 .Include(p => p.User)
+                .Include(p => p.Photos)
                 .ToListAsync();
 
             var dtoList = properties.Select(p => new PropertyDto
@@ -58,7 +59,12 @@ using System.Text.Json;
                 Latitude = p.Latitude,
                 Longitude = p.Longitude,
                 ListingDate = p.ListingDate,
-                EstimatedPrice = p.EstimatedPrice
+                EstimatedPrice = p.EstimatedPrice,
+                PhotoPaths = p.Photos.Select(photo => new PhotoDto
+                {
+                    Id = photo.Id,
+                    Path = photo.Path
+                }).ToList()
             });
 
             return Ok(dtoList);
@@ -188,6 +194,79 @@ using System.Text.Json;
 
 
         ///
+
+        //add image
+        [HttpPost("{propertyId}/upload-photo")]
+        public async Task<IActionResult> UploadPhoto(Guid propertyId, IFormFile file)
+        {
+            var property = await _context.Properties.FindAsync(propertyId);
+            if (property == null)
+                return NotFound("Property not found.");
+
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded.");
+
+            // Local storage path: /wwwroot/uploads/{propertyId}
+            var folderPath = Path.Combine("wwwroot", "uploads", propertyId.ToString());
+            Directory.CreateDirectory(folderPath); // Ensure directory exists
+
+            var uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+            var filePath = Path.Combine(folderPath, uniqueFileName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await file.CopyToAsync(stream);
+            }
+
+            var photo = new Photo
+            {
+                Id = Guid.NewGuid(),
+                Path = Path.Combine("uploads", propertyId.ToString(), uniqueFileName).Replace("\\", "/"),
+                PropertyId = propertyId
+            };
+
+            _context.Photos.Add(photo);
+            await _context.SaveChangesAsync();
+
+            return Ok(new { photo.Id, photo.Path });
+        }
+
+
+        [HttpGet("photo/{photoId}")]
+        public async Task<IActionResult> GetImage(Guid photoId)
+        {
+            var photo = await _context.Photos.FindAsync(photoId);
+            if (photo == null)
+                return NotFound("Photo not found.");
+
+            var fullPath = Path.Combine("wwwroot", photo.Path);
+            if (!System.IO.File.Exists(fullPath))
+                return NotFound("File not found on disk.");
+
+            var fileExtension = Path.GetExtension(fullPath).ToLowerInvariant();
+            var contentType = fileExtension switch
+            {
+                ".jpg" or ".jpeg" => "image/jpeg",
+                ".png" => "image/png",
+                ".gif" => "image/gif",
+                _ => "application/octet-stream"
+            };
+
+            var fileBytes = await System.IO.File.ReadAllBytesAsync(fullPath);
+            return File(fileBytes, contentType);
+        }
+
+        [HttpGet("{propertyId}/photos")]
+        public async Task<IActionResult> GetPhotosForProperty(Guid propertyId)
+        {
+            var photos = await _context.Photos
+                .Where(p => p.PropertyId == propertyId)
+                .ToListAsync();
+
+            var photoPaths = photos.Select(p => p.Path).ToList();
+            return Ok(photoPaths);
+        }
+
 
 
         [HttpPut("{id}")]

@@ -121,8 +121,12 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+<<<<<<< HEAD
 
 app.UseCors("AllowAngular"); 
+=======
+app.UseStaticFiles();
+>>>>>>> 1c84f40a398932c1306caa38ade0fb40ec5a6c45
 app.UseAuthentication();
 app.UseAuthorization();
 
