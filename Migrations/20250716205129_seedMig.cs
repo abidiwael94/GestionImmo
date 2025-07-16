@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GestionImmo.Migrations
 {
     /// <inheritdoc />
-    public partial class mig191900 : Migration
+    public partial class seedMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

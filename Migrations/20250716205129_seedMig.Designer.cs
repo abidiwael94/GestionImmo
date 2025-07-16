@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionImmo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250716201922_mig191900")]
-    partial class mig191900
+    [Migration("20250716205129_seedMig")]
+    partial class seedMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
