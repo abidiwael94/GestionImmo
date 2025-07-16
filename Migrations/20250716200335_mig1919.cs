@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GestionImmo.Migrations
 {
     /// <inheritdoc />
-    public partial class initialcreate : Migration
+    public partial class mig1919 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
