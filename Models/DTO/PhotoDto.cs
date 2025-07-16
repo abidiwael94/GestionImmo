@@ -3,6 +3,8 @@
     public class PhotoDto
     {
         public string Path { get; set; }
+        public Guid Id { get; set; }
+
         public Guid PropertyId { get; set; }
     }
 }

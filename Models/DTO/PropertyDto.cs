@@ -11,6 +11,8 @@ namespace GestionImmo.Models.DTO
 
         public string Address { get; set; }
 
+        public List<PhotoDto> PhotoPaths { get; set; }
+
         public PropertyStatut Status { get; set; }
 
         public Guid UserId { get; set; }
