@@ -170,7 +170,7 @@ using System.Text.Json;
             };
             var jsonPayload = JsonSerializer.Serialize(payload, new JsonSerializerOptions { WriteIndented = true });
             Console.WriteLine("Sending payload to prediction API:\n" + jsonPayload);
-            var response = await httpClient.PostAsJsonAsync("http://localhost:5099/predict", payload);
+            var response = await httpClient.PostAsJsonAsync("http://localhost:5000/predict", payload);
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception("Prediction API failed");
