@@ -3,12 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace GestionImmo.Migrations
 {
     /// <inheritdoc />
-    public partial class initialcreate : Migration
+    public partial class seedMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -22,7 +20,7 @@ namespace GestionImmo.Migrations
                     email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Role = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Role = table.Column<int>(type: "int", nullable: false),
                     phone = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
@@ -144,15 +142,6 @@ namespace GestionImmo.Migrations
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "FullName", "Role", "address", "email", "password", "phone" },
-                values: new object[,]
-                {
-                    { new Guid("3ab35ede-7489-49f6-af05-f7043cd74093"), "admin S", "ADMIN", "Tunis", "se@admin.com", "password123", "20202020" },
-                    { new Guid("95bd3141-36a9-4dd6-adf1-291875bb8c83"), "agent S", "AGENT", "Ariana", "s@eagent.com", "password456", "30303030" }
                 });
 
             migrationBuilder.CreateIndex(

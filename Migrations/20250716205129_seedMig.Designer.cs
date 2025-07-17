@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestionImmo.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250702180217_initialcreate")]
-    partial class initialcreate
+    [Migration("20250716205129_seedMig")]
+    partial class seedMig
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -173,9 +173,8 @@ namespace GestionImmo.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Role")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<int>("Role")
+                        .HasColumnType("int");
 
                     b.Property<string>("address")
                         .IsRequired()
@@ -196,28 +195,6 @@ namespace GestionImmo.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3ab35ede-7489-49f6-af05-f7043cd74093"),
-                            FullName = "admin S",
-                            Role = "ADMIN",
-                            address = "Tunis",
-                            email = "se@admin.com",
-                            password = "password123",
-                            phone = "20202020"
-                        },
-                        new
-                        {
-                            Id = new Guid("95bd3141-36a9-4dd6-adf1-291875bb8c83"),
-                            FullName = "agent S",
-                            Role = "AGENT",
-                            address = "Ariana",
-                            email = "s@eagent.com",
-                            password = "password456",
-                            phone = "30303030"
-                        });
                 });
 
             modelBuilder.Entity("GestionImmo.Models.Entities.Visit", b =>

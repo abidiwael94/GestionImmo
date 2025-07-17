@@ -18,35 +18,6 @@ namespace GestionImmo.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Stocker Role en tant que string (ex: "ADMIN")
-            modelBuilder.Entity<User>()
-                .Property(u => u.Role)
-                .HasConversion<string>();
-
-            // Seed de données pour les utilisateurs
-            modelBuilder.Entity<User>().HasData(
-                new User
-                {
-                    Id = Guid.Parse("3ab35ede-7489-49f6-af05-f7043cd74093"),
-                    FullName = "admin S",
-                    email = "se@admin.com",
-                    password = "password123",
-                    address = "Tunis",
-                    Role = Role.ADMIN,
-                    phone = "20202020"
-                },
-                new User
-                {
-                    Id = Guid.Parse("95bd3141-36a9-4dd6-adf1-291875bb8c83"),
-                    FullName = "agent S",
-                    email = "s@eagent.com",
-                    password = "password456",
-                    address = "Ariana",
-                    Role = Role.AGENT,
-                    phone = "30303030"
-                }
-            );
-
             // Relations entre les entités
 
             modelBuilder.Entity<Property>()
